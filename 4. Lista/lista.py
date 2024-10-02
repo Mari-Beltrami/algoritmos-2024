@@ -16,10 +16,10 @@ class Lista:
 #Elimina y devuelve de la lista si encuentra un elemento que coincida con
 #la clave dada –el primero que encuentre–, si devuelve None significa que no se encontró la clave
 #en la lista, y por ende no se elimina ningún elemento
-    def remove(lista, criterio, valor):
-            indice = search(lista, criterio, valor)
-            if indice is not None:
-                return lista.pop(indice)
+    def remove(self, lista, criterio, valor):
+        indice = self.search(lista, criterio, valor)
+        if indice is not None:
+            return lista.pop(indice)
 
     def ordenar(lista, criterio, reverse = False): #Defino esta función para no tener que definir más funciones by_criterio
         lista.sort(key = lambda item: item[criterio], reverse = reverse)
@@ -30,7 +30,7 @@ class Lista:
         cadena = ""
         for indice, elemento in enumerate(lista):
             cadena += elemento + (", " if indice < len(lista) - 2 else " y " if indice == len(lista) - 2 else "")
-            return cadena
+        return cadena
 
 
 
