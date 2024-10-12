@@ -1,57 +1,12 @@
-class Lista:
-    
-    def __init__(self):
-        self.inicio = None
-        self.tamanio = 0    
-    
-# Devuelve un puntero que apunta al nodo que contiene un elemento que
-#coincida con la clave –el primero que encuentra–, si devuelve None significa que no se encontró
-#la clave en la lista
-    def search(lista, criterio, valor):
-        for indice, elemento in enumerate(lista):
-            if elemento[criterio] == valor:            
-                return indice
-    
 
-#Elimina y devuelve de la lista si encuentra un elemento que coincida con
-#la clave dada –el primero que encuentre–, si devuelve None significa que no se encontró la clave
-#en la lista, y por ende no se elimina ningún elemento
-    def remove(self, lista, criterio, valor):
-        indice = self.search(lista, criterio, valor)
-        if indice is not None:
-            return lista.pop(indice)
-
-    def ordenar(lista, criterio, reverse = False): #Defino esta función para no tener que definir más funciones by_criterio
-        lista.sort(key = lambda item: item[criterio], reverse = reverse)
-
-#Realiza un recorrido de la lista mostrando la información de los elementos al-
-#macenado en la lista.
-    def barrido_continuo(lista):
-        cadena = ""
-        for indice, elemento in enumerate(lista):
-            cadena += elemento + (", " if indice < len(lista) - 2 else " y " if indice == len(lista) - 2 else "")
-        return cadena
-
-
-
-
-
-
-
-"""
 # lista_de_elementos = [1, 20, 5, 67, 3, 4, -1]
 
-#! insertar con posicion
-#! insert(lista,elemento). Agrega el elemento a la lista de manera que el mismo quede ordenado.
+# #! insertar con posicion
 # lista_de_elementos.insert(2, 99)
-
 # #! insertar sin posicion
 # lista_de_elementos.append(123)
 
-#! eliminar un elemento de la lista (suponiendo valores unicos y dato simple)
-#! eliminar(lista, clave). Elimina y devuelve de la lista si encuentra un elemento que coincida con
-#!la clave dada –el primero que encuentre–, si devuelve None significa que no se encontró la clave
-#!en la lista, y por ende no se elimina ningún elemento;
+# #! eliminar un elemento de la lista (suponiendo valores unicos y dato simple)
 # try:
 #     lista_de_elementos.remove(101)
 # except ValueError:
@@ -62,7 +17,7 @@ class Lista:
 # else:
 #     print('el elemento a eliminar no esta en la lista')
 
-#! tamanio. tamaño(lista). Devuelve la cantidad de elementos en la lista
+# #! tamanio
 # print(len(lista_de_elementos))
 
 # #! ordenar elementos simples
@@ -93,10 +48,8 @@ class Lista:
 # ]
 
 # nuevo_personaje = {'nombre': 'Boba Fett', 'especie': 'Humano', 'altura': 178}
-
 #! insertar con posicion
 # personajes_star_wars.insert(8, nuevo_personaje)
-
 #! insertar sin posicion
 # nuevo_personaje_2 = {'nombre': 'Mace Windu', 'especie': 'Humano', 'altura': 190}
 # personajes_star_wars.append(nuevo_personaje_2)
@@ -156,6 +109,4 @@ def show_list_list(title, subtitle, list_values):
         print(f"    {subtitle}")
         for second_index, second_element in enumerate(elemento['sublist']):
             print('    ', second_index, second_element)
-print()
-
-"""
+    print()
