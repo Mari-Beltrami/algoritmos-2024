@@ -1,4 +1,50 @@
+# Funciones para operar con listas
 
+def insert(list_values, value, position=None):
+    """
+    Inserta un valor en la lista. Si se especifica la posición, se inserta en esa posición,
+    si no, se inserta al final.
+    """
+    if position is None:
+        list_values.append(value)  # Inserta al final si no se especifica la posición
+    else:
+        list_values.insert(position, value)  # Inserta en la posición especificada
+
+def remove(list_values, criterio, value):
+    """
+    Elimina un valor de la lista según un criterio específico.
+    """
+    index = search(list_values, criterio, value)
+    if index is not None:
+        return list_values.pop(index)  # Elimina y devuelve el valor
+
+def search(list_values, criterio, value):
+    """
+    Busca un valor en la lista según un criterio.
+    Devuelve el índice del valor si se encuentra, o None si no se encuentra.
+    """
+    for index, item in enumerate(list_values):
+        if item[criterio] == value:
+            return index
+    return None
+
+def sort_list(list_values, key):
+    """
+    Ordena la lista según un criterio específico.
+    """
+    list_values.sort(key=lambda x: x[key])
+
+def display_list(list_values):
+    """
+    Muestra todos los elementos de la lista.
+    """
+    for item in list_values:
+        print(item)
+
+
+
+
+"""
 # lista_de_elementos = [1, 20, 5, 67, 3, 4, -1]
 
 # #! insertar con posicion
@@ -109,4 +155,4 @@ def show_list_list(title, subtitle, list_values):
         print(f"    {subtitle}")
         for second_index, second_element in enumerate(elemento['sublist']):
             print('    ', second_index, second_element)
-    print()
+    print() """
