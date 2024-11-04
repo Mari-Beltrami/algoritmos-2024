@@ -44,7 +44,6 @@ def display_list(list_values):
 
 
 
-"""
 # lista_de_elementos = [1, 20, 5, 67, 3, 4, -1]
 
 # #! insertar con posicion
@@ -155,4 +154,4 @@ def show_list_list(title, subtitle, list_values):
         print(f"    {subtitle}")
         for second_index, second_element in enumerate(elemento['sublist']):
             print('    ', second_index, second_element)
-    print() """
+    print()
