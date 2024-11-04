@@ -15,96 +15,90 @@
 # g. luego de atender la sexta operación, agregar una operación solicitada por el líder supremo
 # Snoke para destruir el planeta Takodana.
 
-class HeapMax:
-    def __init__(self):
-        self.elements = []
+from heap import HeapMax
 
-    def add(self, value):
-        """Añade una operación al montículo y mantiene la propiedad del montículo."""
-        self.elements.append(value)
-        self.float(len(self.elements) - 1)
+# Inicialización del heap para las operaciones de la base Starkiller
+operaciones = HeapMax()
 
-    def remove(self):
-        """Elimina la operación con mayor prioridad (raíz del montículo)."""
-        if len(self.elements) > 0:
-            self.interchange(0, len(self.elements) - 1)
-            value = self.elements.pop()
-            self.sink(0)
-            return value
-        else:
-            return None
+# a. Cargar operaciones con sus prioridades
+operaciones.arrive({
+    "encargado": "Líder Supremo Snoke",
+    "descripción": "Revisión de sistemas",
+    "hora": "08:00",
+    "stormtroopers": 10
+}, priority=3)
 
-    def interchange(self, index_1, index_2):
-        """Intercambia dos elementos del montículo."""
-        self.elements[index_1], self.elements[index_2] = self.elements[index_2], self.elements[index_1]
+operaciones.arrive({
+    "encargado": "Kylo Ren",
+    "descripción": "Entrenamiento de combate",
+    "hora": "09:00",
+    "stormtroopers": 20
+}, priority=3)
 
-    def float(self, index):
-        """Hace que un elemento suba hasta su posición correcta."""
-        father = (index - 1) // 2
-        while index > 0 and self.elements[index][0] > self.elements[father][0]:
-            self.interchange(index, father)
-            index = father
-            father = (index - 1) // 2
+operaciones.arrive({
+    "encargado": "Capitán Phasma",
+    "descripción": "Control de patrullas",
+    "hora": "10:00",
+}, priority=2)
 
-    def sink(self, index):
-        """Hace que un elemento baje hasta su posición correcta."""
-        left_child = (index * 2) + 1
-        control = True
-        while control and left_child < len(self.elements):
-            right_child = (index * 2) + 2
-            max_child = left_child
-            if right_child < len(self.elements) and self.elements[right_child][0] > self.elements[left_child][0]:
-                max_child = right_child
-            if self.elements[index][0] < self.elements[max_child][0]:
-                self.interchange(index, max_child)
-                index = max_child
-                left_child = (index * 2) + 1
-            else:
-                control = False
+operaciones.arrive({
+    "encargado": "Capitán Phasma",
+    "descripción": "Revisión de arsenal",
+    "hora": "11:00",
+}, priority=2)
 
-    def is_empty(self):
-        """Verifica si el montículo está vacío."""
-        return len(self.elements) == 0
+operaciones.arrive({
+    "encargado": "General Hux",
+    "descripción": "Planificación táctica",
+    "hora": "12:00",
+}, priority=1)
 
-# Definir las prioridades de las actividades
-PRIORIDAD_SNOKE_KYLO = 3  # Nivel tres para Snoke y Kylo Ren
-PRIORIDAD_PHASMA = 2  # Nivel dos para el capitán Phasma
-PRIORIDAD_GENERALES = 1  # Nivel uno para el resto de los generales
+operaciones.arrive({
+    "encargado": "General Hux",
+    "descripción": "Mantenimiento de sistemas",
+    "hora": "13:00",
+}, priority=1)
 
-# Inicializar el montículo
-cola_prioridad = HeapMax()
+operaciones.arrive({
+    "encargado": "General Hux",
+    "descripción": "Supervisión de entrenamiento",
+    "hora": "14:00",
+}, priority=1)
 
-# a. Cargar las operaciones
-# Nivel 3 (Snoke y Kylo Ren)
-cola_prioridad.add((PRIORIDAD_SNOKE_KYLO, 'Kylo Ren', 'Entrenar en el uso del sable de luz', '08:00', None))
-cola_prioridad.add((PRIORIDAD_SNOKE_KYLO, 'Líder Supremo Snoke', 'Revisión de estrategias de ataque', '09:00', None))
+operaciones.arrive({
+    "encargado": "General Hux",
+    "descripción": "Gestión de suministros",
+    "hora": "15:00",
+}, priority=1)
 
-# Nivel 2 (Capitán Phasma)
-cola_prioridad.add((PRIORIDAD_PHASMA, 'Capitán Phasma', 'Patrullaje de las instalaciones', '10:00', 10))
-cola_prioridad.add((PRIORIDAD_PHASMA, 'Capitán Phasma', 'Revisión de seguridad en sector C', '11:00', 15))
-cola_prioridad.add((PRIORIDAD_PHASMA, 'Capitán Phasma', 'Entrenamiento de Stormtroopers', '12:00', 20))
-cola_prioridad.add((PRIORIDAD_PHASMA, 'Capitán Phasma', 'Inspección de vehículos en el hangar', '13:00', None))
-
-# Nivel 1 (Generales)
-cola_prioridad.add((PRIORIDAD_GENERALES, 'General Hux', 'Mantenimiento de la base Starkiller', '14:00', None))
-cola_prioridad.add((PRIORIDAD_GENERALES, 'General Mitaka', 'Supervisión de la producción de energía', '15:00', None))
-cola_prioridad.add((PRIORIDAD_GENERALES, 'General Quinn', 'Revisión de comunicaciones intergalácticas', '16:00', None))
-cola_prioridad.add((PRIORIDAD_GENERALES, 'General Hux', 'Planificación de misiones futuras', '17:00', None))
-
-# e. Atender las operaciones de la cola
-print("Atendiendo operaciones de la cola de prioridad:")
-atendidas = 0
-while not cola_prioridad.is_empty() and atendidas < 10:
-    operacion = cola_prioridad.remove()
-    print(f"Atendiendo operación: Encargado: {operacion[1]}, Descripción: {operacion[2]}, Hora: {operacion[3]}, Stormtroopers requeridos: {operacion[4]}")
-    atendidas += 1
+# Función para atender y mostrar la operación actual
+def atender_operacion(heap, contador):
+    if contador == 5:
+        # f. Luego de la quinta operación, agregar nueva operación de Phasma
+        heap.arrive({
+            "encargado": "Capitán Phasma",
+            "descripción": "Revisión de intrusos en hangar B7",
+            "hora": "16:00",
+            "stormtroopers": 25
+        }, priority=2)
+        print("Operación añadida: Revisión de intrusos en hangar B7 por Capitán Phasma.")
     
-    # f. Luego de atender la quinta operación, agregar la operación de revisión de intrusos
-    if atendidas == 5:
-        cola_prioridad.add((PRIORIDAD_PHASMA, 'Capitán Phasma', 'Revisión de intrusos en el hangar B7', '18:00', 25))
-        print("Agregando operación de revisión de intrusos solicitada por Capitán Phasma.")
-    
-    # g. Luego de atender la sexta operación, agregar la operación solicitada por Snoke
-    if atendidas == 6:
-        cola_prioridad.add((PRIORIDAD_SNOKE_KYLO, 'Líder Supremo Snoke', 'Destruir el planeta Takodana', '19:00', None))
-        print("Agregando operación para destruir el planeta Takodana solicitada por Líder Supremo Snoke.")
+    if contador == 6:
+        # g. Luego de la sexta operación, agregar nueva operación de Snoke
+        heap.arrive({
+            "encargado": "Líder Supremo Snoke",
+            "descripción": "Destrucción del planeta Takodana",
+            "hora": "17:00",
+        }, priority=3)
+        print("Operación añadida: Destrucción del planeta Takodana por Líder Supremo Snoke.")
+
+    # Atender la operación de mayor prioridad
+    operacion = heap.atention()
+    if operacion:
+        print(f"Atendiendo operación: {operacion[1]['descripción']} a cargo de {operacion[1]['encargado']} con prioridad {operacion[0]}")
+
+# Atender las operaciones secuencialmente
+contador = 1
+while operaciones.elements:
+    atender_operacion(operaciones, contador)
+    contador += 1
