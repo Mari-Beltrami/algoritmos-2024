@@ -1,195 +1,178 @@
-class HeapMax:
+class MonticuloMax:
+    """Clase que representa un Montículo Máximo"""
+
     def __init__(self):
-        self.elements = []
+        """Inicializa el montículo vacío"""
+        self.elementos = []
 
-    def add(self, value):
-        """Añade una operación al montículo y mantiene la propiedad del montículo."""
-        self.elements.append(value)
-        self.float(len(self.elements) - 1)
+    def agregar(self, valor):
+        """Añade un valor al montículo y ajusta la posición para mantener la propiedad del montículo"""
+        self.elementos.append(valor)
+        self.elevar(len(self.elementos) - 1)
 
-    def remove(self):
-        """Elimina la operación con mayor prioridad (raíz del montículo)."""
-        if len(self.elements) > 0:
-            self.interchange(0, len(self.elements) - 1)
-            value = self.elements.pop()
-            self.sink(0)
-            return value
+    def eliminar(self):
+        """Elimina el elemento de mayor prioridad (la raíz del montículo)"""
+        if len(self.elementos) > 0:
+            self.intercambiar(0, len(self.elementos) - 1)
+            valor = self.elementos.pop()
+            self.hundir(0)
+            return valor
         else:
             return None
 
-    def interchange(self, index_1, index_2):
-        """Intercambia dos elementos del montículo."""
-        self.elements[index_1], self.elements[index_2] = self.elements[index_2], self.elements[index_1]
+    def intercambiar(self, indice_1, indice_2):
+        """Intercambia dos elementos del montículo"""
+        self.elementos[indice_1], self.elementos[indice_2] = self.elementos[indice_2], self.elementos[indice_1]
 
-    def float(self, index):
-        """Hace que un elemento suba hasta su posición correcta."""
-        father = (index - 1) // 2
-        while index > 0 and self.elements[index][0] > self.elements[father][0]:
-            self.interchange(index, father)
-            index = father
-            father = (index - 1) // 2
+    def elevar(self, indice):
+        """Hace que un elemento suba hasta su posición correcta en el montículo"""
+        padre = (indice - 1) // 2
+        while indice > 0 and self.elementos[indice][0] > self.elementos[padre][0]:
+            self.intercambiar(indice, padre)
+            indice = padre
+            padre = (indice - 1) // 2
 
-    def sink(self, index):
-        """Hace que un elemento baje hasta su posición correcta."""
-        left_child = (index * 2) + 1
+    def hundir(self, indice):
+        """Hace que un elemento baje hasta su posición correcta en el montículo"""
+        hijo_izq = (indice * 2) + 1
         control = True
-        while control and left_child < len(self.elements):
-            right_child = (index * 2) + 2
-            max_child = left_child
-            if right_child < len(self.elements) and self.elements[right_child][0] > self.elements[left_child][0]:
-                max_child = right_child
-            if self.elements[index][0] < self.elements[max_child][0]:
-                self.interchange(index, max_child)
-                index = max_child
-                left_child = (index * 2) + 1
+        while control and hijo_izq < len(self.elementos):
+            hijo_der = (indice * 2) + 2
+            hijo_mayor = hijo_izq
+            if hijo_der < len(self.elementos) and self.elementos[hijo_der][0] > self.elementos[hijo_izq][0]:
+                hijo_mayor = hijo_der
+            if self.elementos[indice][0] < self.elementos[hijo_mayor][0]:
+                self.intercambiar(indice, hijo_mayor)
+                indice = hijo_mayor
+                hijo_izq = (indice * 2) + 1
             else:
                 control = False
 
-    def heapify(self, elements):
-        self.elements = elements
-        for i in range(len(self.elements)):
-            self.float(i)
+    def construir_monticulo(self, elementos):
+        """Construye un montículo a partir de una lista de elementos"""
+        self.elementos = elementos
+        for i in range(len(self.elementos)):
+            self.elevar(i)
 
-    def sort(self):
-        result = []
-        amount_elements = len(self.elements)
-        for i in range(amount_elements):
-            value = self.remove()
-            result.append(value)
-        return result
-    
-    def search(self, value):
-        for index, element in enumerate(self.elements):
-            if element[1][0] == value:
-                return index
-    
-    def arrive(self, value, priority):
-        self.add([priority, value])
+    def ordenar(self):
+        """Ordena los elementos del montículo en orden descendente"""
+        resultado = []
+        cantidad_elementos = len(self.elementos)
+        for i in range(cantidad_elementos):
+            valor = self.eliminar()
+            resultado.append(valor)
+        return resultado
 
-    def atention(self):
-        return self.remove()
+    def buscar(self, valor):
+        """Busca un valor en el montículo y devuelve su índice"""
+        for indice, elemento in enumerate(self.elementos):
+            if elemento[1][0] == valor:
+                return indice
 
-    def change_proirity(self, index, new_priority):
-        if index < len(self.elements):
-            previous_priority = self.elements[index][0]
-            self.elements[index][0] = new_priority
-            if new_priority > previous_priority:
-                self.float(index)
-            elif new_priority < previous_priority:
-                self.sink(index)
+    def agregar_operacion(self, valor, prioridad):
+        """Agrega una operación con una prioridad específica"""
+        self.agregar([prioridad, valor])
+
+    def atender(self):
+        """Atiende la operación de mayor prioridad"""
+        return self.eliminar()
+
+    def cambiar_prioridad(self, indice, nueva_prioridad):
+        """Cambia la prioridad de un elemento y ajusta su posición en el montículo"""
+        if indice < len(self.elementos):
+            prioridad_anterior = self.elementos[indice][0]
+            self.elementos[indice][0] = nueva_prioridad
+            if nueva_prioridad > prioridad_anterior:
+                self.elevar(indice)
+            elif nueva_prioridad < prioridad_anterior:
+                self.hundir(indice)
 
 
-class HeapMin():
+class MonticuloMin:
+    """Clase que representa un Montículo Mínimo"""
 
     def __init__(self):
-        self.elements = []
-    
-    def add(self, value):
-        self.elements.append(value)
-        self.float(len(self.elements)-1)
+        """Inicializa el montículo vacío"""
+        self.elementos = []
 
-    def remove(self):
-        if len(self.elements) > 0:
-            self.interchange(0, len(self.elements)-1)
-            value = self.elements.pop()
-            self.sink(0)
-            return value
+    def agregar(self, valor):
+        """Añade un valor al montículo y ajusta su posición para mantener la propiedad del montículo"""
+        self.elementos.append(valor)
+        self.elevar(len(self.elementos) - 1)
+
+    def eliminar(self):
+        """Elimina el elemento de menor prioridad (la raíz del montículo)"""
+        if len(self.elementos) > 0:
+            self.intercambiar(0, len(self.elementos) - 1)
+            valor = self.elementos.pop()
+            self.hundir(0)
+            return valor
         else:
             return None
 
-    def interchange(self, index_1, index_2):
-        self.elements[index_1], self.elements[index_2] = self.elements[index_2], self.elements[index_1]
+    def intercambiar(self, indice_1, indice_2):
+        """Intercambia dos elementos del montículo"""
+        self.elementos[indice_1], self.elementos[indice_2] = self.elementos[indice_2], self.elementos[indice_1]
 
-    def float(self, index):
-        father = (index-1) // 2
-        while index > 0 and self.elements[index] < self.elements[father]:
-            self.interchange(index, father)
-            index = father
-            father = (index-1) // 2
+    def elevar(self, indice):
+        """Hace que un elemento suba hasta su posición correcta en el montículo"""
+        padre = (indice - 1) // 2
+        while indice > 0 and self.elementos[indice] < self.elementos[padre]:
+            self.intercambiar(indice, padre)
+            indice = padre
+            padre = (indice - 1) // 2
 
-    def sink(self, index):
-        left_child = (index * 2) + 1
+    def hundir(self, indice):
+        """Hace que un elemento baje hasta su posición correcta en el montículo"""
+        hijo_izq = (indice * 2) + 1
         control = True
-        while control and left_child < len(self.elements):
-            right_child = (index * 2) + 2
-            min = left_child
-            if right_child < len(self.elements):
-                if self.elements[right_child] < self.elements[left_child]:
-                    min = right_child
-            if self.elements[index] > self.elements[min]:
-                self.interchange(index, min)
-                index = min
-                left_child = (index * 2) + 1
+        while control and hijo_izq < len(self.elementos):
+            hijo_der = (indice * 2) + 2
+            hijo_menor = hijo_izq
+            if hijo_der < len(self.elementos) and self.elementos[hijo_der] < self.elementos[hijo_izq]:
+                hijo_menor = hijo_der
+            if self.elementos[indice] > self.elementos[hijo_menor]:
+                self.intercambiar(indice, hijo_menor)
+                indice = hijo_menor
+                hijo_izq = (indice * 2) + 1
             else:
                 control = False
 
-    def heapify(self, elements):
-        self.elements = elements
-        for i in range(len(self.elements)):
-            self.float(i)
+    def construir_monticulo(self, elementos):
+        """Construye un montículo a partir de una lista de elementos"""
+        self.elementos = elementos
+        for i in range(len(self.elementos)):
+            self.elevar(i)
 
-    def sort(self):
-        result = []
-        amount_elements = len(self.elements)
-        for i in range(amount_elements):
-            value = self.remove()
-            result.append(value)
-        return result
+    def ordenar(self):
+        """Ordena los elementos del montículo en orden ascendente"""
+        resultado = []
+        cantidad_elementos = len(self.elementos)
+        for i in range(cantidad_elementos):
+            valor = self.eliminar()
+            resultado.append(valor)
+        return resultado
 
-    def search(self, value):
-        for index, element in enumerate(self.elements):
-            if element[1][0] == value:
-                return index
+    def buscar(self, valor):
+        """Busca un valor en el montículo y devuelve su índice"""
+        for indice, elemento in enumerate(self.elementos):
+            if elemento[1][0] == valor:
+                return indice
 
-    def arrive(self, value, priority):
-        self.add([priority, value])
+    def agregar_operacion(self, valor, prioridad):
+        """Agrega una operación con una prioridad específica"""
+        self.agregar([prioridad, valor])
 
-    def atention(self):
-        return self.remove()
+    def atender(self):
+        """Atiende la operación de menor prioridad"""
+        return self.eliminar()
 
-    def change_proirity(self, index, new_priority):
-        if index < len(self.elements):
-            previous_priority = self.elements[index][0]
-            self.elements[index][0] = new_priority
-            if new_priority < previous_priority:
-                self.float(index)
-            elif new_priority > previous_priority:
-                self.sink(index)
-
-
-# h = HeapMin()
-# h.add(17)
-# h.add(3)
-# h.add(20)
-# h.add(1)
-# h.add(15)
-# h.add(30)
-# print(h.elements)
-# a = input()
-# elements = [19, 50, 10, 0, 40, 25]
-# h.heapify(elements)
-# print(h.elements)
-# a =input()
-# print(h.sort())
-
-# nombres = ['ana', 'juan', 'mario', 'julieta', 'pepito', 'lola']
-# from random import randint
-
-# for nombre in nombres:
-#     priority = randint(1,3)
-#     h.arrive(nombre, priority)
-
-#     print(h.elements)
-#     a = input()
-
-# while len(h.elements) > 0:
-#     print(h.atention())
-
-# h.elements = [[1, 'pepito'], [1, 'mario'], [1, 'ana'], [2, 'juan'], [2, 'julieta'], [3, 'lola']]
-
-# h.change_proirity(0, 3)
-
-# print(h.elements)
-# a = input()
-# while len(h.elements) > 0:
-#     print(h.atention())
+    def cambiar_prioridad(self, indice, nueva_prioridad):
+        """Cambia la prioridad de un elemento y ajusta su posición en el montículo"""
+        if indice < len(self.elementos):
+            prioridad_anterior = self.elementos[indice][0]
+            self.elementos[indice][0] = nueva_prioridad
+            if nueva_prioridad < prioridad_anterior:
+                self.elevar(indice)
+            elif nueva_prioridad > prioridad_anterior:
+                self.hundir(indice)

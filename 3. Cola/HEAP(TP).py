@@ -15,90 +15,42 @@
 # g. luego de atender la sexta operación, agregar una operación solicitada por el líder supremo
 # Snoke para destruir el planeta Takodana.
 
-from heap import HeapMax
+from heap import MonticuloMax
 
-# Inicialización del heap para las operaciones de la base Starkiller
-operaciones = HeapMax()
+operaciones = MonticuloMax()
 
-# a. Cargar operaciones con sus prioridades
-operaciones.arrive({
-    "encargado": "Líder Supremo Snoke",
-    "descripción": "Revisión de sistemas",
-    "hora": "08:00",
-    "stormtroopers": 10
-}, priority=3)
+operaciones.agregar_operacion("Pedido del Líder Supremo Snoke", 3)
+operaciones.agregar_operacion("Pedido de Kylo Ren", 3)
+operaciones.agregar_operacion("Pedido del Capitán Phasma", 2)
+operaciones.agregar_operacion("Pedido de inspección de equipo", 2)
+operaciones.agregar_operacion("Mantenimiento del hangar principal", 2)
+operaciones.agregar_operacion("Revisión de suministros", 2)
+operaciones.agregar_operacion("Pedido del General Hux", 1)
+operaciones.agregar_operacion("Revisión de seguridad", 1)
 
-operaciones.arrive({
-    "encargado": "Kylo Ren",
-    "descripción": "Entrenamiento de combate",
-    "hora": "09:00",
-    "stormtroopers": 20
-}, priority=3)
+operaciones.agregar_operacion(("Capitán Phasma", "Inspección de intrusos en el hangar B7", "25 Stormtroopers requeridos"), 2)
+operaciones.agregar_operacion(("Líder Supremo Snoke", "Destrucción del planeta Takodana"), 3)
 
-operaciones.arrive({
-    "encargado": "Capitán Phasma",
-    "descripción": "Control de patrullas",
-    "hora": "10:00",
-}, priority=2)
+print("\nAtención de operaciones en la base Starkiller:")
+contador_atendidas = 0
+while operaciones.elementos and contador_atendidas < 5:
+    operacion = operaciones.atender()
+    print("Atendiendo:", operacion)
+    contador_atendidas += 1
 
-operaciones.arrive({
-    "encargado": "Capitán Phasma",
-    "descripción": "Revisión de arsenal",
-    "hora": "11:00",
-}, priority=2)
+if contador_atendidas == 5:
+    operaciones.agregar_operacion(("Capitán Phasma", "Revisión de intrusos en el hangar B7", "25 Stormtroopers requeridos"), 2)
+    print("\nAgregada operación después de la quinta atención.")
 
-operaciones.arrive({
-    "encargado": "General Hux",
-    "descripción": "Planificación táctica",
-    "hora": "12:00",
-}, priority=1)
+operacion = operaciones.atender()
+contador_atendidas += 1
+print("Atendiendo:", operacion)
+if contador_atendidas == 6:
+    operaciones.agregar_operacion(("Líder Supremo Snoke", "Destrucción del planeta Takodana"), 3)
+    print("\nAgregada operación después de la sexta atención.")
 
-operaciones.arrive({
-    "encargado": "General Hux",
-    "descripción": "Mantenimiento de sistemas",
-    "hora": "13:00",
-}, priority=1)
+print("\nAtención de operaciones restantes:")
+while operaciones.elementos:
+    operacion = operaciones.atender()
+    print("Atendiendo:", operacion)
 
-operaciones.arrive({
-    "encargado": "General Hux",
-    "descripción": "Supervisión de entrenamiento",
-    "hora": "14:00",
-}, priority=1)
-
-operaciones.arrive({
-    "encargado": "General Hux",
-    "descripción": "Gestión de suministros",
-    "hora": "15:00",
-}, priority=1)
-
-# Función para atender y mostrar la operación actual
-def atender_operacion(heap, contador):
-    if contador == 5:
-        # f. Luego de la quinta operación, agregar nueva operación de Phasma
-        heap.arrive({
-            "encargado": "Capitán Phasma",
-            "descripción": "Revisión de intrusos en hangar B7",
-            "hora": "16:00",
-            "stormtroopers": 25
-        }, priority=2)
-        print("Operación añadida: Revisión de intrusos en hangar B7 por Capitán Phasma.")
-    
-    if contador == 6:
-        # g. Luego de la sexta operación, agregar nueva operación de Snoke
-        heap.arrive({
-            "encargado": "Líder Supremo Snoke",
-            "descripción": "Destrucción del planeta Takodana",
-            "hora": "17:00",
-        }, priority=3)
-        print("Operación añadida: Destrucción del planeta Takodana por Líder Supremo Snoke.")
-
-    # Atender la operación de mayor prioridad
-    operacion = heap.atention()
-    if operacion:
-        print(f"Atendiendo operación: {operacion[1]['descripción']} a cargo de {operacion[1]['encargado']} con prioridad {operacion[0]}")
-
-# Atender las operaciones secuencialmente
-contador = 1
-while operaciones.elements:
-    atender_operacion(operaciones, contador)
-    contador += 1

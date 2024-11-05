@@ -1,198 +1,161 @@
-from cola import Queue
+from cola import Queue  # Importa la clase Cola para realizar recorridos por niveles en el árbol
 
-class BinaryTree:
-
-    class __Node:
-        def __init__(self, value, left=None, right=None, other_value=None):
-            self.value = value
-            self.left = left
-            self.right = right
-            self.other_value = other_value
+# Clase Árbol Binario
+class ArbolBinario:
+    
+    # Clase interna Nodo
+    class __Nodo:
+        def __init__(self, valor, izquierdo=None, derecho=None, otro_valor=None):
+            self.valor = valor  # Valor principal del nodo
+            self.izquierdo = izquierdo  # Referencia al nodo izquierdo
+            self.derecho = derecho  # Referencia al nodo derecho
+            self.otro_valor = otro_valor  # Valor adicional, puede contener información extra
 
     def __init__(self):
-        self.root = None
+        self.raiz = None  # Inicializa el árbol con la raíz vacía
 
-    def insert_node(self, value, other_value=None):
-        def __insert(root, value, other_value=None):
-            if root is None:
-                return BinaryTree.__Node(value, other_value=other_value)
-            elif value < root.value:
-                root.left = __insert(root.left, value, other_value)
+    # Inserta un nuevo nodo en el árbol
+    def insertar_nodo(self, valor, otro_valor=None):
+        def __insertar(raiz, valor, otro_valor=None):
+            if raiz is None:
+                return ArbolBinario.__Nodo(valor, otro_valor=otro_valor)
+            elif valor < raiz.valor:
+                raiz.izquierdo = __insertar(raiz.izquierdo, valor, otro_valor)
             else:
-                root.right = __insert(root.right, value, other_value)
-            return root
+                raiz.derecho = __insertar(raiz.derecho, valor, otro_valor)
+            return raiz
 
-        self.root = __insert(self.root, value, other_value)
+        self.raiz = __insertar(self.raiz, valor, otro_valor)
 
-    def search(self, key):
-        def __search(root, key):
-            if root is not None:
-                if root.value == key:
-                    # print('lo encontre')
-                    return root
-                elif key < root.value:
-                    # print(f'buscalo a la izquierda de {root.value}')
-                    return __search(root.left, key)
+    # Busca un nodo en el árbol por su valor
+    def buscar(self, clave):
+        def __buscar(raiz, clave):
+            if raiz is not None:
+                if raiz.valor == clave:
+                    return raiz
+                elif clave < raiz.valor:
+                    return __buscar(raiz.izquierdo, clave)
                 else:
-                    # print(f'buscalo a la derecha de {root.value}')
-                    return __search(root.right, key)
-            # else:
-            #     print('no hay nada')
+                    return __buscar(raiz.derecho, clave)
         aux = None
-        if self.root is not None:
-            aux = __search(self.root, key)
+        if self.raiz is not None:
+            aux = __buscar(self.raiz, clave)
         return aux
 
+    # Recorre el árbol en preorden
     def preorden(self):
-        def __preorden(root):
-            if root is not None:
-                print(root.value)
-                # print(f'izquierda de {root.value}')
-                __preorden(root.left)
-                # print(f'derecha de {root.value}')
-                __preorden(root.right)
+        def __preorden(raiz):
+            if raiz is not None:
+                print(raiz.valor)
+                __preorden(raiz.izquierdo)
+                __preorden(raiz.derecho)
 
-        if self.root is not None:
-            __preorden(self.root)
+        if self.raiz is not None:
+            __preorden(self.raiz)
 
+    # Cuenta los nodos que son superhéroes
     def contar_super_heroes(self):
-        def __contar_super_heroes(root):
-            counter = 0
-            if root is not None:
-                if root.other_value.get('is_hero') is True:
-                    counter = 1
-                counter += __contar_super_heroes(root.left)
-                counter += __contar_super_heroes(root.right)
-            return counter
+        def __contar_super_heroes(raiz):
+            contador = 0
+            if raiz is not None:
+                if raiz.otro_valor.get('es_heroe') is True:
+                    contador = 1
+                contador += __contar_super_heroes(raiz.izquierdo)
+                contador += __contar_super_heroes(raiz.derecho)
+            return contador
 
-        return __contar_super_heroes(self.root)
+        return __contar_super_heroes(self.raiz)
 
+    # Recorre el árbol en inorden
     def inorden(self):
-        def __inorden(root):
-            if root is not None:
-                __inorden(root.left)
-                print(root.value)
-                __inorden(root.right)
+        def __inorden(raiz):
+            if raiz is not None:
+                __inorden(raiz.izquierdo)
+                print(raiz.valor)
+                __inorden(raiz.derecho)
 
-        if self.root is not None:
-            __inorden(self.root)
+        if self.raiz is not None:
+            __inorden(self.raiz)
 
+    # Recorre el árbol en postorden
     def postorden(self):
-        def __postorden(root):
-            if root is not None:
-                __postorden(root.right)
-                print(root.value)
-                __postorden(root.left)
+        def __postorden(raiz):
+            if raiz is not None:
+                __postorden(raiz.derecho)
+                print(raiz.valor)
+                __postorden(raiz.izquierdo)
 
-        if self.root is not None:
-            __postorden(self.root)
+        if self.raiz is not None:
+            __postorden(self.raiz)
 
+    # Recorre el árbol en inorden, mostrando solo los villanos
     def inorden_villanos(self):
-        def __inorden_villanos(root):
-            if root is not None:
-                __inorden_villanos(root.left)
-                if root.other_value.get('is_hero') is not True:
-                    print(root.value)
-                __inorden_villanos(root.right)
+        def __inorden_villanos(raiz):
+            if raiz is not None:
+                __inorden_villanos(raiz.izquierdo)
+                if raiz.otro_valor.get('es_heroe') is not True:
+                    print(raiz.valor)
+                __inorden_villanos(raiz.derecho)
 
-        if self.root is not None:
-            __inorden_villanos(self.root)
+        if self.raiz is not None:
+            __inorden_villanos(self.raiz)
 
-    def inorden_superheros_start_with(self, start):
-        def __inorden_superheros_start_with(root, start):
-            if root is not None:
-                __inorden_superheros_start_with(root.left, start)
-                if root.other_value.get('is_hero') is True and root.value.startswith(start):
-                    print(root.value)
-                __inorden_superheros_start_with(root.right, start)
+    # Muestra los superhéroes cuyo nombre empieza con una letra específica
+    def inorden_superheroes_comienzan_con(self, inicio):
+        def __inorden_superheroes_comienzan_con(raiz, inicio):
+            if raiz is not None:
+                __inorden_superheroes_comienzan_con(raiz.izquierdo, inicio)
+                if raiz.otro_valor.get('es_heroe') is True and raiz.valor.startswith(inicio):
+                    print(raiz.valor)
+                __inorden_superheroes_comienzan_con(raiz.derecho, inicio)
 
-        if self.root is not None:
-            __inorden_superheros_start_with(self.root, start)
+        if self.raiz is not None:
+            __inorden_superheroes_comienzan_con(self.raiz, inicio)
 
-    def by_level(self):
+    # Recorre el árbol por niveles usando una cola
+    def por_nivel(self):
         pendientes = Queue()
-        if self.root is not None:
-            pendientes.arrive(self.root)
+        if self.raiz is not None:
+            pendientes.arrive(self.raiz)
 
         while pendientes.size() > 0:
-            node = pendientes.attention()
-            print(node.value)
-            if node.left is not None:
-                pendientes.arrive(node.left)
-            if node.right is not None:
-                pendientes.arrive(node.right)
+            nodo = pendientes.attention()
+            print(nodo.valor)
+            if nodo.izquierdo is not None:
+                pendientes.arrive(nodo.izquierdo)
+            if nodo.derecho is not None:
+                pendientes.arrive(nodo.derecho)
 
-    def delete_node(self, value):
-        def __replace(root):
-            if root.right is None:
-                # print(f'no tiene derecha es el mayor {root.value}')
-                return root.left, root
+    # Elimina un nodo por su valor
+    def eliminar_nodo(self, valor):
+        def __reemplazar(raiz):
+            if raiz.derecho is None:
+                return raiz.izquierdo, raiz
             else:
-                # print('seguir buscando nodo par remplaz+ar a la dercha')
-                root.right, replace_node = __replace(root.right)
-                return root, replace_node
+                raiz.derecho, nodo_reemplazo = __reemplazar(raiz.derecho)
+                return raiz, nodo_reemplazo
 
-        def __delete(root, value):
-            value_delete = None
-            if root is not None:
-                if root.value > value:
-                    # print(f'buscar  a la izquierda de {root.value}')
-                    root.left, value_delete = __delete(root.left, value)
-                elif root.value < value:
-                    # print(f'buscar  a la derecha de {root.value}')
-                    root.right, value_delete = __delete(root.right, value)
+        def __eliminar(raiz, valor):
+            valor_eliminado = None
+            if raiz is not None:
+                if raiz.valor > valor:
+                    raiz.izquierdo, valor_eliminado = __eliminar(raiz.izquierdo, valor)
+                elif raiz.valor < valor:
+                    raiz.derecho, valor_eliminado = __eliminar(raiz.derecho, valor)
                 else:
-                    # print('valor encontrado')
-                    value_delete = root.value
-                    if root.left is None:
-                        # print('a la izquierda no hay nada')
-                        return root.right, value_delete
-                    elif root.right is None:
-                        # print('a la derecha  no hay nada')
-                        return root.left, value_delete
+                    valor_eliminado = raiz.valor
+                    if raiz.izquierdo is None:
+                        return raiz.derecho, valor_eliminado
+                    elif raiz.derecho is None:
+                        return raiz.izquierdo, valor_eliminado
                     else:
-                        # print('tiene ambos hijos')
-                        root.left, replace_node = __replace(root.left)
-                        root.value = replace_node.value
-                        return root, value_delete
+                        raiz.izquierdo, nodo_reemplazo = __reemplazar(raiz.izquierdo)
+                        raiz.valor = nodo_reemplazo.valor
+                        return raiz, valor_eliminado
                 
-            return root, value_delete
+            return raiz, valor_eliminado
 
-        delete_value = None
-        if self.root is not None:
-            self.root, delete_value = __delete(self.root, value)
-        return delete_value
-
-# tree = BinaryTree()
-
-# tree.insert_node(19)
-# tree.insert_node(7)
-# tree.insert_node(31)
-# tree.insert_node(11)
-# tree.insert_node(10)
-# tree.insert_node(45)
-# tree.insert_node(22)
-# tree.insert_node(27)
-
-# pos = tree.search(27)
-# if pos:
-#     print('lo encontre', pos.value)
-# else:
-#     print('no esta')
-
-# tree.delete_node(7)
-# tree.delete_node(11)
-# tree.delete_node(31)
-# tree.delete_node(27)
-# tree.delete_node(45)
-# tree.delete_node(22)
-# tree.delete_node(19)
-# tree.delete_node(10)
-# tree.insert_node(27)
-
-# print(tree.delete_node(100))
-# tree.preorden()
-
-# print(tree.root.right)
-
-# tree.by_level()
+        valor_eliminado = None
+        if self.raiz is not None:
+            self.raiz, valor_eliminado = __eliminar(self.raiz, valor)
+        return valor_eliminado

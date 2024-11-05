@@ -14,68 +14,69 @@ class Nodo:
         self.dato = dato
         self.siguiente = None
 
-class HashTable:
-    def __init__(self, size):
-        self.size = size
-        self.table = [None] * size
+class TablaHash:
+    def __init__(self, tamaño):
+        self.tamaño = tamaño
+        self.tabla = [None] * tamaño
 
-    def insertar(self, key, dato):
-        index = key % self.size
-        if not self.table[index]:
-            self.table[index] = Nodo(dato)
+    def insertar(self, clave, dato):
+        indice = clave % self.tamaño
+        if not self.tabla[indice]:
+            self.tabla[indice] = Nodo(dato)
         else:
-            current = self.table[index]
-            while current.siguiente:
-                current = current.siguiente
-            current.siguiente = Nodo(dato)
+            actual = self.tabla[indice]
+            while actual.siguiente:
+                actual = actual.siguiente
+            actual.siguiente = Nodo(dato)
 
-    def buscar(self, key):
-        index = key % self.size
-        current = self.table[index]
-        result = []
-        while current:
-            if key == current.dato['numero'] % self.size:
-                result.append(current.dato)
-            current = current.siguiente
-        return result
+    def buscar(self, clave):
+        indice = clave % self.tamaño
+        actual = self.tabla[indice]
+        resultado = []  
+        while actual:
+            if clave == actual.dato['numero'] % self.tamaño:
+                resultado.append(actual.dato)
+            actual = actual.siguiente
+        return resultado
 
-    def mostrar_todos(self, condition):
-        result = []
-        for bucket in self.table:
-            current = bucket
-            while current:
-                if condition(current.dato):
-                    result.append(current.dato)
-                current = current.siguiente
-        return result
+    def mostrar_todos(self, condicion):
+        resultado = []  
+        for cubeta in self.tabla:
+            actual = cubeta
+            while actual:
+                if condicion(actual.dato):
+                    resultado.append(actual.dato)
+                actual = actual.siguiente
+        return resultado
 
 def hash_tipo(tipo):
-    return sum(ord(c) for c in tipo) % 10
+    return sum(ord(c) for c in tipo) % 10  
 
 def hash_numero(numero):
-    return numero % 10
+    return numero % 10  
 
 def hash_nivel(nivel):
-    return nivel // 10
+    return nivel // 10  
 
-tabla_tipo = HashTable(10)
-tabla_numero = HashTable(10)
-tabla_nivel = HashTable(10)
+tabla_tipo = TablaHash(10)
+tabla_numero = TablaHash(10)
+tabla_nivel = TablaHash(10)
 
 def ingresar_datos():
-    pokemons = []
+    pokemones = []  
     while True:
         numero = int(input("Ingrese el número del Pokémon (o -1 para terminar): "))
         if numero == -1:
-            break
-        nombre = input("Ingrese el nombre del Pokémon: ")
+            break  
+        nombre = input("Ingrese el nombre del Pokémon: ")  
         tipos = input("Ingrese los tipos de Pokémon separados por coma: ").split(',')
-        nivel = int(input("Ingrese el nivel del Pokémon: "))
-        pokemons.append({'numero': numero, 'nombre': nombre, 'tipos': tipos, 'nivel': nivel})
-    return pokemons
+        nivel = int(input("Ingrese el nivel del Pokémon: "))  
+        pokemones.append({'numero': numero, 'nombre': nombre, 'tipos': tipos, 'nivel': nivel})
+    return pokemones  
 
-pokemons = ingresar_datos()
-for pokemon in pokemons:
+pokemones = ingresar_datos()
+
+for pokemon in pokemones:
     for tipo in pokemon['tipos']:
         tabla_tipo.insertar(hash_tipo(tipo.strip()), pokemon)
     tabla_numero.insertar(hash_numero(pokemon['numero']), pokemon)
@@ -88,13 +89,11 @@ niveles_multiplos_2_5_10 = tabla_nivel.mostrar_todos(lambda p: p['nivel'] % 2 ==
 print("Pokémons cuyos niveles son múltiplos de 2, 5 y 10:", niveles_multiplos_2_5_10)
 
 tipos_especificos = ['Acero', 'Fuego', 'Eléctrico', 'Hielo']
-pokemons_tipos_especificos = []
+pokemones_tipos_especificos = []
+
 for tipo in tipos_especificos:
-    pokemons_tipos_especificos.extend(tabla_tipo.mostrar_todos(lambda p: tipo in p['tipos']))
-print("Pokémons de tipos específicos (Acero, Fuego, Eléctrico, Hielo):", pokemons_tipos_especificos)
+    pokemones_tipos_especificos.extend(tabla_tipo.mostrar_todos(lambda p: tipo in p['tipos']))
+print("Pokémons de tipos específicos (Acero, Fuego, Eléctrico, Hielo):", pokemones_tipos_especificos)
 
-
-
-
-print ()
+print()  
 
